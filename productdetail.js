@@ -1,56 +1,60 @@
-
-let imgcontainer = document.querySelector(".image-container");
+// ========== Load Product Images ==========
+const imgContainer = document.querySelector(".image-container");
 
 const params = new URLSearchParams(window.location.search);
-const imgsrc = params.get('img');
-const img = decodeURIComponent(imgsrc);
+const imgSrc = params.get("img");
+const decodedImg = decodeURIComponent(imgSrc);
 
-if (imgsrc && imgcontainer) {
-    imgcontainer.innerHTML = `
-        <div class="main-image">
-            <img id="mainimg" src="${img}" alt="">
-        </div>
-
-        <div class="thumbnail-row">
-            <img class="thumbnail" src="${img}" alt="">
-            <img class="thumbnail" src="images/f2.jpg" alt="">
-            <img class="thumbnail" src="images/f3.jpg" alt="">
-            <img class="thumbnail" src="images/f4.jpg" alt="">
-        </div>
-    `;
+if (imgSrc && imgContainer) {
+  imgContainer.innerHTML = `
+    <div class="main-image">
+      <img id="mainimg" src="${decodedImg}" alt="Product Image">
+    </div>
+    <div class="thumbnail-row">
+      <img class="thumbnail" src="${decodedImg}" alt="">
+      <img class="thumbnail" src="images/f2.jpg" alt="">
+      <img class="thumbnail" src="images/f3.jpg" alt="">
+      <img class="thumbnail" src="images/f4.jpg" alt="">
+    </div>
+  `;
 }
 
-// =======================
-// Thumbnail switching
-// =======================
+// ========== Change Main Image on Thumbnail Click ==========
 document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("thumbnail")) {
-        const mainImg = document.getElementById("mainimg");
-        mainImg.src = e.target.src;
+  if (e.target.classList.contains("thumbnail")) {
+    const mainImg = document.getElementById("mainimg");
+    if (mainImg) {
+      mainImg.src = e.target.src;
     }
+  }
 });
 
-// =======================
-// Add to cart button
-// =======================
+// ========== Add to Cart ==========
 const addProductBtn = document.getElementById("addproductbtn");
 
-addProductBtn.addEventListener("click", () => {
-    const Image = document.getElementById("mainimg").getAttribute("src");
-    const name = document.querySelector(".productname").textContent.trim();
-    const price = parseFloat(document.querySelector(".productprice").textContent.replace("$", "").trim());
+if (addProductBtn) {
+  addProductBtn.addEventListener("click", () => {
+    const image = document.getElementById("mainimg")?.getAttribute("src");
+    const name = document.querySelector(".productname")?.textContent.trim();
+    const priceText = document.querySelector(".productprice")?.textContent.trim();
+    const price = parseFloat(priceText.replace(/[^0-9.]/g, ""));
+
+    if (!image || !name || isNaN(price)) {
+      alert("Some product details are missing!");
+      return;
+    }
 
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    const exists = cart.some(item => item.Image === Image);
+    const exists = cart.some(item => item.Image === image);
 
     if (!exists) {
-        cart.push({ Image, name, price });
-        localStorage.setItem("cart", JSON.stringify(cart));
-        alert("Added to Cart!");
-        addProductBtn.disabled = true;
+      cart.push({ Image: image, name, price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Added to Cart!");
+      addProductBtn.disabled = true;
     } else {
-        alert("Added to Cart!");
-        addProductBtn.disabled = true;
+      alert("Already in Cart!");
+      addProductBtn.disabled = true;
     }
-});
+  });
+}
