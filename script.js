@@ -122,18 +122,21 @@ hamburger.addEventListener("click", () => {
 const products = document.querySelectorAll(".pro");
 
 products.forEach(product => {
-  const img = product.querySelector("img");
+  const images = product.getAttribute("data-images");
   const Name = product.querySelector("h4").textContent;
   const price = product.querySelector("p").textContent;
+  const span = product.querySelector("span").textContent;
 
   product.addEventListener("click", () => {
-    const imgSrc = img.getAttribute("src");
-    const encodedImg = encodeURIComponent(imgSrc);
-    const encodedname = encodeURIComponent(Name);
-    const encodedprice = encodeURIComponent(price);
-    window.location.href = `product-details.html?img=${encodedImg}&name=${encodedname}&price=${encodedprice}`;
+    const encodedImgs = encodeURIComponent(images);
+    const encodedName = encodeURIComponent(Name);
+    const encodedPrice = encodeURIComponent(price);
+    const encodedspan = encodeURIComponent(span);
+    
+    window.location.href = `product-details.html?images=${encodedImgs}&name=${encodedName}&price=${encodedPrice}&span=${encodedspan}`;
   });
 });
+
 
 const cartBody = document.querySelector("#cart table tbody");
 const cartItems = JSON.parse(localStorage.getItem("cart")) || [];

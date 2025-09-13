@@ -1,35 +1,35 @@
 // ========== Load Product Images ==========
 const imgContainer = document.querySelector(".image-container");
-
 const params = new URLSearchParams(window.location.search);
-const imgSrc = params.get("img");
-const Name = params.get("name");
-const price = params.get("price");
 
-const decodedImg = decodeURIComponent(imgSrc);
-const decodedname = decodeURIComponent(Name);
-const decodedprice = decodeURIComponent(price);
+const images = params.get("images"); 
+const Name = decodeURIComponent(params.get("name"));
+const price = decodeURIComponent(params.get("price"));
+const span = decodeURIComponent(params.get("span"));
 
-if (imgSrc && imgContainer) {
+if (images && imgContainer) {
+  const decodedImgs = decodeURIComponent(images).split(","); // split into array
+  const mainImg = decodedImgs[0]; // first is main
+
   imgContainer.innerHTML = `
     <div class="main-image">
-      <img id="mainimg" src="${decodedImg}" alt="Product Image">
+      <img id="mainimg" src="${mainImg}" alt="Product Image">
     </div>
     <div class="thumbnail-row">
-      <img class="thumbnail" src="${decodedImg}" alt="">
-      <img class="thumbnail" src="images/f2.jpg" alt="">
-      <img class="thumbnail" src="images/f3.jpg" alt="">
-      <img class="thumbnail" src="images/f4.jpg" alt="">
+      ${decodedImgs.map(img => `<img class="thumbnail" src="${img}" alt="">`).join("")}
     </div>
   `;
 }
 
+
 const productname = document.querySelector(".productname");
+const animename = document.querySelector(".animeName");
 const productprice = document.querySelector(".price");
 const pricevalue = productprice.querySelector("h1");
 
-productname.textContent =`${decodedname}`;
-pricevalue.textContent =`${decodedprice}`;
+productname.textContent =`${Name}`;
+pricevalue.textContent =`${price}`;
+animename.textContent =`${span}`;
 
 // ========== Change Main Image on Thumbnail Click ==========
 document.addEventListener("click", (e) => {
