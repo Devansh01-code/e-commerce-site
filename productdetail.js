@@ -47,14 +47,13 @@ const addProductBtn = document.getElementById("addproductbtn");
 if (addProductBtn) {
   addProductBtn.addEventListener("click", () => {
     const image = document.getElementById("mainimg")?.getAttribute("src");
-    const name = decodedname;
-    const pricetext =`${decodedprice}`;
-    const price = parseFloat(pricetext.replace(/[^0-9.]/g, ""));
+    const name = Name;
+    const pricetext = `${price}`;
+    let Price = parseFloat(pricetext.replace(/[^0-9.]/g, ""));
+    if (isNaN(Price)) Price = 0;   // fallback if not valid
+    
 
-    // const name = document.querySelector(".productname")?.textContent.trim();
-    // const priceText = document.querySelector(".productprice")?.textContent.trim();
-
-    if (!image || !name || isNaN(price)) {
+    if (!image || !name || isNaN(Price)) {
       alert("Some product details are missing!");
       return;
     }
@@ -64,9 +63,10 @@ if (addProductBtn) {
     const exists = cart.some(item => item.Image === image);
 
     if (!exists) {
-      cart.push({ Image: image, name, price});
+      cart.push({ Image: image, name, Price});
       localStorage.setItem("cart", JSON.stringify(cart));
       alert("Added to Cart!");
+      addProductBtn.innerHTML=`Added Successfully`;
       addProductBtn.disabled = true;
     } else {
       alert("Already Added");
